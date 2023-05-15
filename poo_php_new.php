@@ -1,35 +1,52 @@
 <?php
-abstract class Animal {
-    protected $nombre;   // Propiedad protegida, accesible por las clases hijas
-    private $edad;       // Propiedad privada, no accesible por las clases hijas
+// Se define la clase abstracta "ObraLiteraria"
+abstract class ObraLiteraria{
+    protected $titulo;
+    public $autor;
+    private static $genero = "Ficción";
 
-    abstract public function hacerSonido();   // Método abstracto, debe ser implementado por las clases hijas
+    public function __construct($titulo, $autor){
+        $this->titulo = $titulo;
+        $this->autor = $autor;
+    }
 
-    protected function obtenerEdad() {  // Método protegido, accesible por las clases hijas
-        return $this->edad;
+    final private static function getGenero(){
+        echo "El género de la obra es " . self::$genero;
+    }
+
+    public function getInfo() : void{
+        echo "La obra literaria se titula \"$this->titulo\", y es del autor $this->autor.";
+    }
+
+    abstract protected function estado();
+}
+
+// Se define la clase hija "Manga" que extiende de "ObraLiteraria"
+class Manga extends ObraLiteraria{
+    protected $volumenes;
+
+    public function __construct($titulo, $autor, $volumenes = 0){
+        $this->volumenes = $volumenes;
+        parent::__construct($titulo, $autor);
+    }
+
+    public function getInfo() : void{
+        echo "El manga \"$this->titulo\" es del autor $this->autor, tiene $this->volumenes volumenes, y el género es: " . parent::$genero;
+    }
+
+    protected function estado(){
+        return "En emisión";
     }
 }
 
-class Perro extends Animal {
-    public function hacerSonido() {
-        echo "El perro hace woof!";
-    }
-
-    public function mostrarNombre() {
-        echo $this->nombre;  // Accediendo a la propiedad protegida heredada
-    }
-}
-
-class Gato extends Animal {
-    public function hacerSonido() {
-        echo "El gato hace miau!";
-    }
-
-    public function __construct() {
-        $this->nombre = "Tom";  // Accediendo y modificando la propiedad protegida heredada
-        //$this->edad = 5;     // ERROR: No se puede acceder a una propiedad privada heredada
-    }
-}
-
+//$obraLiteraria = new ObraLiteraria("La sombra del viento", "Carlos Ruiz Zafón");
+$obraLiteraria->getInfo();
+echo "<br>";
+Manga::getGenero();
+echo "<br>";
+$mangaOnePiece = new Manga("One Piece", "Eiichiro Oda", 100);
+$mangaOnePiece->getInfo();
+echo "<br>";
+echo "El estado del manga \"$mangaOnePiece->titulo\" es: " . $mangaOnePiece->estado();
 
 ?>
