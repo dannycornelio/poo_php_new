@@ -21,7 +21,7 @@ abstract class Comins{
         $this->autor = $autor;
     }
 //definicion de metodo
-    final public static function getEstado(){
+    final public static function getEstado() : void{
         echo "La obra esta en estado " . self::$estado;
     }
 
